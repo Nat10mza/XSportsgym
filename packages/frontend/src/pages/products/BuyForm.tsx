@@ -13,6 +13,7 @@ import {
   Text,
   Heading,
   useColorModeValue,
+  useToast,
   Center,
 } from "@chakra-ui/react";
 
@@ -39,8 +40,17 @@ let BuyForm = (props: any) => {
   let onSubmit = (data: any) => {
     console.log(data);
     props.onBuy(data);
+    toast({
+      title: "Generating Link.",
+      description: "Wait, Mercado Pago is initiating.",
+      status: "info",
+      duration: 9000,
+      isClosable: true,
+    });
     reset();
   };
+
+  const toast = useToast();
 
   return (
     <Center>

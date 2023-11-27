@@ -431,31 +431,37 @@ export const clearCart = () => (dispatch: AppDispatch) => {
 };
 
 export const buyCart = (data: any) => async (dispatch: AppDispatch) => {
-  console.log(data);
-  const res = await axios
-    .post(`orders`, {
-      userId: data?.userId,
-      total: data?.total,
-      products: data?.buyedProducts?.map((e: any) => {
-        return {
-          productId: e?.productId,
-          quantity: e?.quantity,
-          name: e?.name,
-          price: e?.price,
-        };
-      }),
-      payer: {
-        name: data.payer.name,
-        surname: data.payer.surname,
-        adress: {
-          street_name: data.payer.adress.street_name,
-          street_number: Number(data.payer.adress.street_number),
+  // console.log(data);
+  try {
+    const res = await axios
+      .post(`orders`, {
+        userId: data?.userId,
+        total: data?.total,
+        products: data?.buyedProducts?.map((e: any) => {
+          return {
+            productId: e?.productId,
+            quantity: e?.quantity,
+            name: e?.name,
+            price: e?.price,
+          };
+        }),
+        payer: {
+          name: data.payer.name,
+          surname: data.payer.surname,
+          adress: {
+            street_name: data.payer.adress.street_name,
+            street_number: Number(data.payer.adress.street_number),
+          },
+          email: data.payer.email,
+          zip_code: Number(data.payer.zip_code),
         },
-        email: data.payer.email,
-        zip_code: Number(data.payer.zip_code),
-      },
-    })
-    .then((res) => res.data);
-  console.dir(res);
-  dispatch({ type: BUY_CART, payload: res });
+      })
+      .then((res) => res.data);
+    console.dir(res);
+    dispatch({ type: BUY_CART, payload: res });
+  } catch {
+    const newError = new Error("¡Hubo un error al procesar la solicitud!");
+
+    console.error(newError);
+  }
 };
